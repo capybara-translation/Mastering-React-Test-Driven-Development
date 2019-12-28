@@ -32,7 +32,7 @@ describe('CustomerForm', () => {
     expectToBeInputFieldOfTypeText(firstNameField());
   });
 
-  it('includes the existing value for the first time', () => {
+  it('includes the existing value for the first name', () => {
     render(<CustomerForm firstName="Ashley" />);
     expect(firstNameField().value).toEqual('Ashley');
   });
