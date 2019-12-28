@@ -11,6 +11,7 @@ describe('CustomerForm', () => {
     expect(formElement.tagName).toEqual('INPUT');
     expect(formElement.type).toEqual('text');
   };
+  const firstNameField = () => form('customer').elements.firstName;
 
   beforeEach(() => {
     ({ render, container } = createContainer());
@@ -23,13 +24,11 @@ describe('CustomerForm', () => {
 
   it('renders the first name field as a text box', () => {
     render(<CustomerForm />);
-    const field = form('customer').elements.firstName;
-    expectToBeInputFieldOfTypeText(field);
+    expectToBeInputFieldOfTypeText(firstNameField());
   });
 
   it('includes the existing value for the first time', () => {
     render(<CustomerForm firstName="Ashley" />);
-    const field = form('customer').elements.firstName;
-    expect(field.value).toEqual('Ashley');
+    expect(firstNameField().value).toEqual('Ashley');
   });
 });
