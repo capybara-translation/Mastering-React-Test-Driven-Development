@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "watch": "jest --watchAll",
     "build": "webpack",
     "fmt": "prettier --write 'src/**/*' 'test/**/*'"
   },
