@@ -111,4 +111,14 @@ describe('AppointmentForm', () => {
       await ReactTestUtils.Simulate.submit(form('appointment'));
     });
   });
+
+  const timeSlotTable = () =>
+    container.querySelector('table#time-slots');
+
+  describe('time slot table', () => {
+    it('renders a table for time slots', () => {
+      render(<AppointmentForm />);
+      expect(timeSlotTable()).not.toBeNull();
+    });
+  });
 });
