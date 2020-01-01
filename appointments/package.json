@@ -4,8 +4,8 @@
   "description": "Appointments system",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "watch": "jest --watchAll",
+    "test": "jest --testPathIgnorePatterns server",
+    "watch": "jest --watchAll --testPathIgnorePatterns server",
     "build": "webpack",
     "fmt": "prettier --write 'src/**/*' 'test/**/*'",
     "build-server": "webpack --config webpack-server.config.js",
