@@ -56,7 +56,7 @@ describe('AppointmentFormLoader', () => {
 
     expect(
       AppointmentFormExports.AppointmentForm
-    ).toHaveBeenCalledWith(
+    ).toHaveBeenLastCalledWith(
       {
         availableTimeSlots
       },
