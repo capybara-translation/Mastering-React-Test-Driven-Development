@@ -9,6 +9,7 @@ import { createContainer, withEvent } from './domManipulators';
 import { AppointmentForm } from '../src/AppointmentForm';
 
 describe('AppointmentForm', () => {
+  const customer = { id: 123 };
   let render,
     container,
     form,
@@ -64,7 +65,7 @@ describe('AppointmentForm', () => {
   });
 
   it('calls fetch with the right properties when submitting data', async () => {
-    render(<AppointmentForm />);
+    render(<AppointmentForm customer={customer} />);
     await submit(form('appointment'));
     expect(window.fetch).toHaveBeenCalledWith(
       '/appointments',
@@ -81,7 +82,9 @@ describe('AppointmentForm', () => {
     window.fetch.mockReturnValue(fetchResponseOk({}));
     const saveSpy = jest.fn();
 
-    render(<AppointmentForm onSave={saveSpy} />);
+    render(
+      <AppointmentForm customer={customer} onSave={saveSpy} />
+    );
     await submit(form('appointment'));
 
     expect(saveSpy).toHaveBeenCalled();
@@ -91,7 +94,9 @@ describe('AppointmentForm', () => {
     window.fetch.mockReturnValue(fetchResponseError());
     const saveSpy = jest.fn();
 
-    render(<AppointmentForm onSave={saveSpy} />);
+    render(
+      <AppointmentForm customer={customer} onSave={saveSpy} />
+    );
     await submit(form('appointment'));
 
     expect(saveSpy).not.toHaveBeenCalled();
@@ -100,7 +105,7 @@ describe('AppointmentForm', () => {
   it('prevents the default action when submitting the form', async () => {
     const preventDefaultSpy = jest.fn();
 
-    render(<AppointmentForm />);
+    render(<AppointmentForm customer={customer} />);
     await submit(form('appointment'), {
       preventDefault: preventDefaultSpy
     });
@@ -111,7 +116,7 @@ describe('AppointmentForm', () => {
   it('renders error message when fetch call fails', async () => {
     window.fetch.mockReturnValue(fetchResponseError());
 
-    render(<AppointmentForm />);
+    render(<AppointmentForm customer={customer} />);
     await submit(form('appointment'));
 
     expect(element('.error')).not.toBeNull();
@@ -124,11 +129,19 @@ describe('AppointmentForm', () => {
     window.fetch.mockReturnValueOnce(fetchResponseError());
     window.fetch.mockReturnValue(fetchResponseOk());
 
-    render(<AppointmentForm />);
+    render(<AppointmentForm customer={customer} />);
     await submit(form('appointment'));
     await submit(form('appointment'));
 
     expect(element('.error')).toBeNull();
+  });
+
+  it('passes the customer id to fetch when submitting', async () => {
+    render(<AppointmentForm customer={customer} />);
+    await submit(form('appointment'));
+    expect(requestBodyOf(window.fetch)).toMatchObject({
+      customer: customer.id
+    });
   });
 
   const itRendersAsASelectBox = fieldName => {
@@ -192,6 +205,7 @@ describe('AppointmentForm', () => {
     it('saves existing value when submitted', async () => {
       render(
         <AppointmentForm
+          customer={customer}
           {...props}
           {...{ [fieldName]: 'value' }}
         />
@@ -208,6 +222,7 @@ describe('AppointmentForm', () => {
     it('saves new value when submitted', async () => {
       render(
         <AppointmentForm
+          customer={customer}
           {...props}
           {...{ [fieldName]: 'existingValue' }}
         />
@@ -397,6 +412,7 @@ describe('AppointmentForm', () => {
     it('saves existing value when submitted', async () => {
       render(
         <AppointmentForm
+          customer={customer}
           availableTimeSlots={availableTimeSlots}
           today={today}
           startsAt={availableTimeSlots[0].startsAt}
@@ -412,6 +428,7 @@ describe('AppointmentForm', () => {
     it('saves new value when submitted', async () => {
       render(
         <AppointmentForm
+          customer={customer}
           availableTimeSlots={availableTimeSlots}
           today={today}
           startsAt={availableTimeSlots[0].startsAt}
