@@ -7,6 +7,7 @@ import * as AppointmentsDayViewExports from '../src/AppointmentsDayView';
 
 describe('AppointmentsDayViewLoader', () => {
   let renderAndWait, container;
+
   const today = new Date();
   const appointments = [
     { startsAt: today.setHours(9, 0, 0, 0) },
@@ -28,7 +29,7 @@ describe('AppointmentsDayViewLoader', () => {
     AppointmentsDayViewExports.AppointmentsDayView.mockRestore();
   });
 
-  it('fetches appointments happening today when component is mounted', async () => {
+  it('fetches data when component is mounted', async () => {
     const from = today.setHours(0, 0, 0, 0);
     const to = today.setHours(23, 59, 59, 999);
 
@@ -87,5 +88,11 @@ describe('AppointmentsDayViewLoader', () => {
       `/appointments/${from}-${to}`,
       expect.anything()
     );
+  });
+
+  it('calls window.fetch just once', async () => {
+    await renderAndWait(<AppointmentsDayViewLoader />);
+    await renderAndWait(<AppointmentsDayViewLoader />);
+    expect(window.fetch.mock.calls.length).toBe(1);
   });
 });

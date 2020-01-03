@@ -10,6 +10,7 @@ import { AppointmentForm } from '../src/AppointmentForm';
 
 describe('AppointmentForm', () => {
   const customer = { id: 123 };
+
   let render,
     container,
     form,
@@ -83,19 +84,18 @@ describe('AppointmentForm', () => {
     const saveSpy = jest.fn();
 
     render(
-      <AppointmentForm customer={customer} onSave={saveSpy} />
+      <AppointmentForm onSave={saveSpy} customer={customer} />
     );
     await submit(form('appointment'));
-
     expect(saveSpy).toHaveBeenCalled();
   });
 
-  it('does not notfiy onSave if the POST request returns an error', async () => {
+  it('does not notify onSave if the POST request returns an error', async () => {
     window.fetch.mockReturnValue(fetchResponseError());
     const saveSpy = jest.fn();
 
     render(
-      <AppointmentForm customer={customer} onSave={saveSpy} />
+      <AppointmentForm onSave={saveSpy} customer={customer} />
     );
     await submit(form('appointment'));
 

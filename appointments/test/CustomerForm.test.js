@@ -51,6 +51,7 @@ describe('CustomerForm', () => {
 
   it('calls fetch with the right properties when submitting data', async () => {
     render(<CustomerForm />);
+
     await submit(form('customer'));
     expect(window.fetch).toHaveBeenCalledWith(
       '/customers',

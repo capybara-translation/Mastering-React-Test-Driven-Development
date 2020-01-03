@@ -1,25 +1,25 @@
 import React from 'react';
 import {
-  click,
-  id,
-  className,
   createShallowRenderer,
   type,
-  childrenOf
+  click,
+  childrenOf,
+  className,
+  id
 } from './shallowHelpers';
 import { App } from '../src/App';
+import { AppointmentFormLoader } from '../src/AppointmentFormLoader';
 import { AppointmentsDayViewLoader } from '../src/AppointmentsDayViewLoader';
 import { CustomerForm } from '../src/CustomerForm';
-import { AppointmentFormLoader } from '../src/AppointmentFormLoader';
 
 describe('App', () => {
-  let render, child, elementMatching;
+  let render, elementMatching, child;
 
   beforeEach(() => {
-    ({ render, child, elementMatching } = createShallowRenderer());
+    ({ render, elementMatching, child } = createShallowRenderer());
   });
 
-  it('initially shows the AppointmentsDayViewLoader', () => {
+  it('initially shows the AppointmentDayViewLoader', () => {
     render(<App />);
     expect(
       elementMatching(type(AppointmentsDayViewLoader))
@@ -53,7 +53,7 @@ describe('App', () => {
     expect(elementMatching(type(CustomerForm))).toBeDefined();
   });
 
-  it('hides the AppointmentsDayViewLoader when button is clicked', async () => {
+  it('hides the AppointmentDayViewLoader when button is clicked', async () => {
     beginAddingCustomerAndAppointment();
     expect(
       elementMatching(type(AppointmentsDayViewLoader))
@@ -63,7 +63,7 @@ describe('App', () => {
   it('hides the button bar when CustomerForm is being displayed', async () => {
     beginAddingCustomerAndAppointment();
     expect(
-      elementMatching(className('.button-bar'))
+      elementMatching(className('button-bar'))
     ).not.toBeTruthy();
   });
 
@@ -93,7 +93,7 @@ describe('App', () => {
   const saveAppointment = () =>
     elementMatching(type(AppointmentFormLoader)).props.onSave();
 
-  it('renders AppointmentsDayViewLoader after AppointmentForm is submitted', async () => {
+  it('renders AppointmentDayViewLoader after AppointmentForm is submitted', async () => {
     beginAddingCustomerAndAppointment();
     saveCustomer();
     saveAppointment();

@@ -7,9 +7,10 @@ import * as AppointmentFormExports from '../src/AppointmentForm';
 
 describe('AppointmentFormLoader', () => {
   let renderAndWait, container;
+
   const today = new Date();
   const availableTimeSlots = [
-    { startsAt: today.setHours(9, 0, 0, 0) }
+    { when: today.setHours(9, 0, 0, 0) }
   ];
 
   beforeEach(() => {
@@ -57,9 +58,7 @@ describe('AppointmentFormLoader', () => {
     expect(
       AppointmentFormExports.AppointmentForm
     ).toHaveBeenLastCalledWith(
-      {
-        availableTimeSlots
-      },
+      { availableTimeSlots },
       expect.anything()
     );
   });
