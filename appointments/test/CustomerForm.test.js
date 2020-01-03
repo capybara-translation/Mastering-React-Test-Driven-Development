@@ -217,7 +217,7 @@ describe('CustomerForm', () => {
 
         blur(
           field('customer', fieldName),
-          withEvent(fieldName, ' ')
+          withEvent(fieldName, value)
         );
 
         expect(element('.error')).not.toBeNull();
@@ -230,17 +230,31 @@ describe('CustomerForm', () => {
       ' ',
       'First name is required'
     );
-
     itInvalidatesFieldWithValue(
       'lastName',
       ' ',
       'Last name is required'
     );
-
     itInvalidatesFieldWithValue(
       'phoneNumber',
       ' ',
       'Phone number is required'
     );
+    itInvalidatesFieldWithValue(
+      'phoneNumber',
+      'invalid',
+      'Only numbers, spaces and these symbols are allowed: ( ) + -'
+    );
+
+    it('accepts standard phone number characters when validating', () => {
+      render(<CustomerForm />);
+
+      blur(
+        element("[name='phoneNumber']"),
+        withEvent('phoneNumber', '0123456789+()- ')
+      );
+
+      expect(element('.error')).toBeNull();
+    });
   });
 });

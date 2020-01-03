@@ -3,6 +3,15 @@ import React, { useState } from 'react';
 const required = description => value =>
   !value || value.trim() === '' ? description : undefined;
 
+const match = (re, description) => value =>
+  !value.match(re) ? description : undefined;
+
+const list = (...validators) => value =>
+  validators.reduce(
+    (result, validator) => result || validator(value),
+    undefined
+  );
+
 const Error = () => (
   <div className="error">An error occurred during save.</div>
 );
@@ -13,6 +22,7 @@ export const CustomerForm = ({
   phoneNumber,
   onSave
 }) => {
+  const [validationErrors, setValidationErrors] = useState({});
   const [error, setError] = useState(false);
 
   const [customer, setCustomer] = useState({
@@ -21,36 +31,23 @@ export const CustomerForm = ({
     phoneNumber
   });
 
-  const [validationErrors, setValidationErrors] = useState({});
-
   const handleChange = ({ target }) =>
     setCustomer(customer => ({
       ...customer,
       [target.name]: target.value
     }));
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const result = await window.fetch('/customers', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(customer)
-    });
-    if (result.ok) {
-      setError(false);
-      const customerWithId = await result.json();
-      onSave(customerWithId);
-    } else {
-      setError(true);
-    }
-  };
-
   const handleBlur = ({ target }) => {
     const validators = {
       firstName: required('First name is required'),
       lastName: required('Last name is required'),
-      phoneNumber: required('Phone number is required')
+      phoneNumber: list(
+        required('Phone number is required'),
+        match(
+          /^[0-9+()\- ]*$/,
+          'Only numbers, spaces and these symbols are allowed: ( ) + -'
+        )
+      )
     };
     const result = validators[target.name](target.value);
     setValidationErrors({
@@ -69,6 +66,23 @@ export const CustomerForm = ({
           {validationErrors[fieldName]}
         </span>
       );
+    }
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const result = await window.fetch('/customers', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customer)
+    });
+    if (result.ok) {
+      setError(false);
+      const customerWithId = await result.json();
+      onSave(customerWithId);
+    } else {
+      setError(true);
     }
   };
 
