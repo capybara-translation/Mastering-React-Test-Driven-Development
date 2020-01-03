@@ -125,6 +125,20 @@ describe('CustomerForm', () => {
     expect(element('.error')).toBeNull();
   });
 
+  it('renders field validation errors from server', async () => {
+    const errors = {
+      phoneNumber: 'Phone number already exists in the system'
+    };
+    window.fetch.mockReturnValue(
+      fetchResponseError(422, { errors })
+    );
+    render(<CustomerForm {...validCustomer} />);
+    await submit(form('customer'));
+    expect(element('.error').textContent).toMatch(
+      errors.phoneNumber
+    );
+  });
+
   it('does not submit the form when there are validation errors', async () => {
     render(<CustomerForm />);
 
