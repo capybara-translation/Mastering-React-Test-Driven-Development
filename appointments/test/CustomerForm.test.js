@@ -7,6 +7,7 @@ import {
 } from './spyHelpers';
 import { createContainer, withEvent } from './domManipulators';
 import { CustomerForm } from '../src/CustomerForm';
+import { act } from 'react-dom/test-utils';
 
 describe('CustomerForm', () => {
   let render,
@@ -16,7 +17,8 @@ describe('CustomerForm', () => {
     labelFor,
     element,
     change,
-    submit;
+    submit,
+    blur;
 
   beforeEach(() => {
     ({
@@ -27,7 +29,8 @@ describe('CustomerForm', () => {
       labelFor,
       element,
       change,
-      submit
+      submit,
+      blur
     } = createContainer());
     jest
       .spyOn(window, 'fetch')
@@ -201,5 +204,43 @@ describe('CustomerForm', () => {
     itAssignsAnIdThatMatchesTheLabelId('phoneNumber');
     itSubmitsExistingValue('phoneNumber', '12345');
     itSubmitsNewValue('phoneNumber', '67890');
+  });
+
+  describe('validation', () => {
+    const itInvalidatesFieldWithValue = (
+      fieldName,
+      value,
+      description
+    ) => {
+      it(`displays error after blur when ${fieldName} field is '${value}'`, () => {
+        render(<CustomerForm />);
+
+        blur(
+          field('customer', fieldName),
+          withEvent(fieldName, ' ')
+        );
+
+        expect(element('.error')).not.toBeNull();
+        expect(element('.error').textContent).toMatch(description);
+      });
+    };
+
+    itInvalidatesFieldWithValue(
+      'firstName',
+      ' ',
+      'First name is required'
+    );
+
+    itInvalidatesFieldWithValue(
+      'lastName',
+      ' ',
+      'Last name is required'
+    );
+
+    itInvalidatesFieldWithValue(
+      'phoneNumber',
+      ' ',
+      'Phone number is required'
+    );
   });
 });
