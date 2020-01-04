@@ -1,5 +1,6 @@
 import React from 'react';
 import 'whatwg-fetch';
+import ReactTestUtils, { act } from 'react-dom/test-utils';
 import {
   fetchResponseOk,
   fetchResponseError,
@@ -223,6 +224,27 @@ describe('CustomerForm', () => {
         [fieldName]: value
       });
     });
+  
+  it('displays indicator when form is submitting', async () => {
+    render(<CustomerForm {...validCustomer} />);
+    act(() => {
+      ReactTestUtils.Simulate.submit(form('customer'));
+    });
+    await act(async () => {
+      expect(element('span.submittingIndicator')).not.toBeNull();
+    });
+  });
+
+  it('initially does not display the submitting indicator', () => {
+    render(<CustomerForm {...validCustomer} />);
+    expect(element('.submittingIndicator')).toBeNull();
+  });
+
+  it('hides indicator when form has submitted', async () => {
+    render(<CustomerForm {...validCustomer} />);
+    await submit(form('customer'));
+    expect(element('.submittingIndicator')).toBeNull();
+  });
 
   describe('first name field', () => {
     itRendersAsATextBox('firstName');
