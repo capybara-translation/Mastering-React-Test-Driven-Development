@@ -130,7 +130,9 @@ export const CustomerForm = ({
       {renderError('phoneNumber')}
 
       <input type="submit" value="Add" />
-      { submitting ? <span className="submittingIndicator" /> : null}
+      {submitting ? (
+        <span className="submittingIndicator" />
+      ) : null}
     </form>
   );
 };
