@@ -121,7 +121,6 @@ describe('CustomerSearch', () => {
     window.fetch
       .mockReturnValueOnce(fetchResponseOk(tenCustomers))
       .mockReturnValue(fetchResponseOk(anotherTenCustomers));
-
     await renderAndWait(<CustomerSearch />);
     await clickAndWait(element('button#next-page'));
     await clickAndWait(element('button#next-page'));
