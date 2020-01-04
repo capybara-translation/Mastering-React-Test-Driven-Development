@@ -47,15 +47,33 @@ describe('CustomerForm', () => {
     window.fetch.mockRestore();
   });
 
+  const submitButton = () => element('input[type="submit"]');
+
   it('renders a form', () => {
     render(<CustomerForm {...validCustomer} />);
     expect(form('customer')).not.toBeNull();
   });
 
-  it('has a submit button', () => {
-    render(<CustomerForm {...validCustomer} />);
-    const submitButton = element('input[type="submit"]');
-    expect(submitButton).not.toBeNull();
+  describe('submit button', () => {
+    it('has a submit button', () => {
+      render(<CustomerForm {...validCustomer} />);
+      expect(submitButton()).not.toBeNull();
+    });
+
+    it('disables the submit button when submitting', async () => {
+      render(<CustomerForm {...validCustomer} />);
+      act(() => {
+        ReactTestUtils.Simulate.submit(form('customer'));
+      });
+      await act(async () => {
+        expect(submitButton().disabled).toBeTruthy();
+      });
+    });
+
+    it('initially does not disable submit button', () => {
+      render(<CustomerForm {...validCustomer} />);
+      expect(submitButton().disabled).toBeFalsy();
+    });
   });
 
   it('calls fetch with the right properties when submitting data', async () => {
@@ -294,6 +312,39 @@ describe('CustomerForm', () => {
       });
     };
 
+    const itClearsFieldError = (fieldName, fieldValue) => {
+      it(`clears error when user corrects it`, async () => {
+        render(<CustomerForm {...validCustomer} />);
+
+        blur(
+          field('customer', fieldName),
+          withEvent(fieldName, '')
+        );
+        change(
+          field('customer', fieldName),
+          withEvent(fieldName, fieldValue)
+        );
+
+        expect(element('.error')).toBeNull();
+      });
+    };
+
+    const itDoesNotInvalidateFieldOnKeypress = (
+      fieldName,
+      fieldValue
+    ) => {
+      it(`does not validate field on keypress`, async () => {
+        render(<CustomerForm {...validCustomer} />);
+
+        change(
+          field('customer', fieldName),
+          withEvent(fieldName, fieldValue)
+        );
+
+        expect(element('.error')).toBeNull();
+      });
+    };
+
     itInvalidatesFieldWithValue(
       'firstName',
       ' ',
@@ -314,6 +365,14 @@ describe('CustomerForm', () => {
       'invalid',
       'Only numbers, spaces and these symbols are allowed: ( ) + -'
     );
+
+    itClearsFieldError('firstName', 'name');
+    itClearsFieldError('lastName', 'name');
+    itClearsFieldError('phoneNumber', '1234567890');
+
+    itDoesNotInvalidateFieldOnKeypress('firstName', '');
+    itDoesNotInvalidateFieldOnKeypress('lastName', '');
+    itDoesNotInvalidateFieldOnKeypress('phoneNumber', '');
 
     it('accepts standard phone number characters when validating', () => {
       render(<CustomerForm {...validCustomer} />);
