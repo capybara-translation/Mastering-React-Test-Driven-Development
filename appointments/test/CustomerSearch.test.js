@@ -11,7 +11,7 @@ const oneCustomer = [
 const twoCustomers = [
   { id: 1, firstName: 'A', lastName: 'B', phoneNumber: '1' },
   { id: 2, firstName: 'C', lastName: 'D', phoneNumber: '2' }
-]
+];
 
 describe('CustomerSearch', () => {
   let renderAndWait, container, element, elements;

@@ -63,6 +63,21 @@ describe('hasError', () => {
   });
 });
 
+describe('list', () => {
+  it('passes if all its child validators pass', () => {
+    const validator = list(alwaysPass, alwaysPass);
+    expect(validator(null)).not.toBeDefined();
+  });
+
+  it('returns the first child that does not match', () => {
+    const validator = list(
+      alwaysFail('first'),
+      alwaysFail('second')
+    );
+    expect(validator(null)).toEqual('first');
+  });
+});
+
 describe('required', () => {
   it('passes if there is a string', () => {
     const validator = required('matched');
