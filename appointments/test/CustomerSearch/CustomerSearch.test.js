@@ -1,9 +1,9 @@
 import React from 'react';
 import 'whatwg-fetch';
-import { createContainer, withEvent } from './domManipulators';
-import { CustomerSearch } from '../src/CustomerSearch';
-import { fetchResponseOk } from './spyHelpers';
-import { childrenOf } from './shallowHelpers';
+import { createContainer, withEvent } from '../domManipulators';
+import { CustomerSearch } from '../../src/CustomerSearch';
+import { fetchResponseOk } from '../spyHelpers';
+import { childrenOf } from '../shallowHelpers';
 
 const oneCustomer = [
   { id: 1, firstName: 'A', lastName: 'B', phoneNumber: '1' }

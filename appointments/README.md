@@ -34,3 +34,9 @@ git diff tags/appointment-first-name -- . ':!node_modules' ':!package-lock.json'
 ```
 git diff tags/extracting-helpers -- test/AppointmentsDayView.test.js
 ```
+
+# Running git diff to only show file names
+
+```
+git diff tags/add-redux --name-only -- . ':!node_modules' ':!package-lock.json' ':!README.md' ':!package.json'
+```
