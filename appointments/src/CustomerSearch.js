@@ -98,7 +98,11 @@ export const CustomerSearch = ({ renderCustomerActions }) => {
         </thead>
         <tbody>
           {customers.map(customer => (
-            <CustomerRow customer={customer} key={customer.id} renderCustomerActions={renderCustomerActions} />
+            <CustomerRow
+              customer={customer}
+              key={customer.id}
+              renderCustomerActions={renderCustomerActions}
+            />
           ))}
         </tbody>
       </table>
@@ -108,4 +112,4 @@ export const CustomerSearch = ({ renderCustomerActions }) => {
 
 CustomerSearch.defaultProps = {
   renderCustomerActions: () => {}
-}
+};

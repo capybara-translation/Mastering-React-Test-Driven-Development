@@ -3,6 +3,7 @@ import 'whatwg-fetch';
 import { createContainer, withEvent } from './domManipulators';
 import { CustomerSearch } from '../src/CustomerSearch';
 import { fetchResponseOk } from './spyHelpers';
+import { childrenOf } from './shallowHelpers';
 
 const oneCustomer = [
   { id: 1, firstName: 'A', lastName: 'B', phoneNumber: '1' }
@@ -190,7 +191,9 @@ describe('CustomerSearch', () => {
     const actionSpy = jest.fn();
     actionSpy.mockReturnValue('actions');
     window.fetch.mockReturnValue(fetchResponseOk(oneCustomer));
-    await renderAndWait(<CustomerSearch renderCustomerActions={actionSpy} />);
+    await renderAndWait(
+      <CustomerSearch renderCustomerActions={actionSpy} />
+    );
     const rows = elements('table tbody td');
     expect(rows[rows.length - 1].textContent).toEqual('actions');
   });
@@ -199,7 +202,9 @@ describe('CustomerSearch', () => {
     const actionSpy = jest.fn();
     actionSpy.mockReturnValue('actions');
     window.fetch.mockReturnValue(fetchResponseOk(oneCustomer));
-    await renderAndWait(<CustomerSearch renderCustomerActions={actionSpy} />);
+    await renderAndWait(
+      <CustomerSearch renderCustomerActions={actionSpy} />
+    );
     expect(actionSpy).toHaveBeenCalledWith(oneCustomer[0]);
   });
 });
