@@ -1,28 +1,27 @@
-import 'whatwg-fetch';
 import { storeSpy, expectRedux } from 'expect-redux';
-import { configureStore } from '../../src/store';
-import { reducer } from '../../src/sagas/customer';
+import 'whatwg-fetch';
 import {
   fetchResponseOk,
   fetchResponseError
 } from '../spyHelpers';
+import { configureStore } from '../../src/store';
+import { reducer } from '../../src/sagas/customer';
 
 describe('addCustomer', () => {
-  let store;
   const customer = { id: 123 };
+  let store;
 
   beforeEach(() => {
     jest
       .spyOn(window, 'fetch')
       .mockReturnValue(fetchResponseOk(customer));
-
     store = configureStore([storeSpy]);
   });
 
   const dispatchRequest = customer =>
     store.dispatch({
       type: 'ADD_CUSTOMER_REQUEST',
-      customer
+      customer: customer
     });
 
   it('sets current status to submitting', () => {
@@ -91,7 +90,6 @@ describe('reducer', () => {
 
   describe('ADD_CUSTOMER_SUBMITTING action', () => {
     const action = { type: 'ADD_CUSTOMER_SUBMITTING' };
-
     it('sets status to SUBMITTING', () => {
       expect(reducer(undefined, action)).toMatchObject({
         status: 'SUBMITTING'
