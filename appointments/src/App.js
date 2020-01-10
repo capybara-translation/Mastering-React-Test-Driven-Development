@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { AppointmentFormLoader } from './AppointmentFormLoader';
 import { AppointmentsDayViewLoader } from './AppointmentsDayViewLoader';
 import { CustomerForm } from './CustomerForm';
@@ -19,12 +20,10 @@ export const MainScreen = () => (
   </React.Fragment>
 );
 
-export const App = ({ history }) => {
-  const [customer, setCustomer] = useState();
-
+export const App = ({ history, setCustomerForAppointment }) => {
   const transitionToAddAppointment = useCallback(
     customer => {
-      setCustomer(customer);
+      setCustomerForAppointment(customer);
       history.push('/addAppointment');
     },
     [history]
@@ -47,19 +46,11 @@ export const App = ({ history }) => {
 
   return (
     <Switch>
-      <Route
-        path="/addCustomer"
-        render={() => (
-          <CustomerForm onSave={transitionToAddAppointment} />
-        )}
-      />
+      <Route path="/addCustomer" component={CustomerForm} />
       <Route
         path="/addAppointment"
         render={() => (
-          <AppointmentFormLoader
-            customer={customer}
-            onSave={transitionToDayView}
-          />
+          <AppointmentFormLoader onSave={transitionToDayView} />
         )}
       />
       <Route
@@ -75,3 +66,12 @@ export const App = ({ history }) => {
     </Switch>
   );
 };
+
+const mapDispatchToProps = {
+  setCustomerForAppointment: customer => ({
+    type: 'SET_CUSTOMER_FOR_APPOINTMENT',
+    customer
+  })
+};
+
+export const ConnectedApp = connect(null, mapDispatchToProps)(App);
