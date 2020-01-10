@@ -4,12 +4,12 @@ import {
   fetchResponseOk,
   fetchResponseError
 } from '../spyHelpers';
-import { configureStore } from '../../src/store';
-import { reducer } from '../../src/sagas/customer';
-import { 
+import {
   itMaintainsExistingState,
   itSetsStatus
- } from '../reducerGenerators';
+} from '../reducerGenerators';
+import { configureStore } from '../../src/store';
+import { reducer } from '../../src/sagas/customer';
 
 describe('addCustomer', () => {
   const customer = { id: 123 };
@@ -25,7 +25,7 @@ describe('addCustomer', () => {
   const dispatchRequest = customer =>
     store.dispatch({
       type: 'ADD_CUSTOMER_REQUEST',
-      customer: customer
+      customer
     });
 
   it('sets current status to submitting', () => {
@@ -94,14 +94,16 @@ describe('reducer', () => {
 
   describe('ADD_CUSTOMER_SUBMITTING action', () => {
     const action = { type: 'ADD_CUSTOMER_SUBMITTING' };
-    itSetsStatus(reducer, action, 'SUBMITTING');
+
     itMaintainsExistingState(reducer, action);
+    itSetsStatus(reducer, action, 'SUBMITTING');
   });
 
   describe('ADD_CUSTOMER_FAILED action', () => {
     const action = { type: 'ADD_CUSTOMER_FAILED' };
-    itSetsStatus(reducer, action, 'FAILED');
+
     itMaintainsExistingState(reducer, action);
+    itSetsStatus(reducer, action, 'FAILED');
 
     it('sets error to true', () => {
       expect(reducer(undefined, action)).toMatchObject({
@@ -117,8 +119,8 @@ describe('reducer', () => {
       validationErrors
     };
 
-    itSetsStatus(reducer, action, 'VALIDATION_FAILED');
     itMaintainsExistingState(reducer, action);
+    itSetsStatus(reducer, action, 'VALIDATION_FAILED');
 
     it('sets validation errors to provided errors', () => {
       expect(reducer(undefined, action)).toMatchObject({
@@ -134,8 +136,8 @@ describe('reducer', () => {
       customer
     };
 
-    itSetsStatus(reducer, action, 'SUCCESSFUL');
     itMaintainsExistingState(reducer, action);
+    itSetsStatus(reducer, action, 'SUCCESSFUL');
 
     it('sets customer to provided customer', () => {
       expect(reducer(undefined, action)).toMatchObject({
