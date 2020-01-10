@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { AppointmentFormLoader } from './AppointmentFormLoader';
 import { AppointmentsDayViewLoader } from './AppointmentsDayViewLoader';
 import { CustomerForm } from './CustomerForm';
 import { CustomerSearchRoute } from './CustomerSearchRoute';
+import { connect } from 'react-redux';
 
 export const MainScreen = () => (
   <React.Fragment>
@@ -21,13 +21,10 @@ export const MainScreen = () => (
 );
 
 export const App = ({ history, setCustomerForAppointment }) => {
-  const transitionToAddAppointment = useCallback(
-    customer => {
-      setCustomerForAppointment(customer);
-      history.push('/addAppointment');
-    },
-    [history]
-  );
+  const transitionToAddAppointment = customer => {
+    setCustomerForAppointment(customer);
+    history.push('/addAppointment');
+  };
 
   const transitionToDayView = useCallback(
     () => history.push('/'),
