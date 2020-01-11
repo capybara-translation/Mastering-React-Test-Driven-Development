@@ -13,43 +13,43 @@ import {
 } from '../../src/sagas/queryCustomer';
 jest.mock('relay-runtime');
 
-describe('QUERY_CUSTOMER_SUBMITTING action', () => {
-  const action = { type: 'QUERY_CUSTOMER_SUBMITTING' };
-  itSetsStatus(reducer, action, 'SUBMITTING');
-  itMaintainsExistingState(reducer, action);
-});
-
-describe('QUERY_CUSTOMER_FAILED action', () => {
-  const action = { type: 'QUERY_CUSTOMER_FAILED' };
-  itSetsStatus(reducer, action, 'FAILED');
-  itMaintainsExistingState(reducer, action);
-});
-
-describe('QUERY_CUSTOMER_SUCCESSFUL action', () => {
-  const customer = { id: 123 };
-  const appointments = [{ starts: 123 }];
-  const action = {
-    type: 'QUERY_CUSTOMER_SUCCESSFUL',
-    customer,
-    appointments
-  };
-  itSetsStatus(reducer, action, 'SUCCESSFUL');
-  itMaintainsExistingState(reducer, action);
-
-  it('sets received customer and appointments', () => {
-    expect(reducer(undefined, action)).toMatchObject({
-      customer,
-      appointments
-    });
-  });
-});
-
 describe('reducer', () => {
   it('returns a default state for an undefined existing state', () => {
     expect(reducer(undefined, {})).toEqual({
       customer: {},
       appointments: [],
       status: undefined
+    });
+  });
+
+  describe('QUERY_CUSTOMER_SUBMITTING action', () => {
+    const action = { type: 'QUERY_CUSTOMER_SUBMITTING' };
+    itSetsStatus(reducer, action, 'SUBMITTING');
+    itMaintainsExistingState(reducer, action);
+  });
+
+  describe('QUERY_CUSTOMER_FAILED action', () => {
+    const action = { type: 'QUERY_CUSTOMER_FAILED' };
+    itSetsStatus(reducer, action, 'FAILED');
+    itMaintainsExistingState(reducer, action);
+  });
+
+  describe('QUERY_CUSTOMER_SUCCESSFUL action', () => {
+    const customer = { id: 123 };
+    const appointments = [{ starts: 123 }];
+    const action = {
+      type: 'QUERY_CUSTOMER_SUCCESSFUL',
+      customer,
+      appointments
+    };
+    itSetsStatus(reducer, action, 'SUCCESSFUL');
+    itMaintainsExistingState(reducer, action);
+
+    it('sets received customer and appointments', () => {
+      expect(reducer(undefined, action)).toMatchObject({
+        customer,
+        appointments
+      });
     });
   });
 });
@@ -102,6 +102,7 @@ describe('queryCustomer', () => {
 
   it('dispatches a FAILED action when the call throws an error', () => {
     fetchQuery.mockReturnValue(Promise.reject(new Error()));
+
     dispatchRequest();
 
     return expectRedux(store)

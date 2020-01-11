@@ -11,11 +11,11 @@ import {
   reducer as customerReducer
 } from './sagas/customer';
 import { customerAdded } from './sagas/app';
+import { reducer as appointmentReducer } from './reducers/appointment';
 import {
   queryCustomer,
   reducer as queryCustomerReducer
 } from './sagas/queryCustomer';
-import { reducer as appointmentReducer } from './reducers/appointment';
 
 function* rootSaga() {
   yield takeLatest('ADD_CUSTOMER_REQUEST', addCustomer);

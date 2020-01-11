@@ -61,6 +61,7 @@ describe('getEnvironment', () => {
     Network.create.mockReturnValue(network);
     Store.mockImplementation(() => store);
     RecordSource.mockImplementation(() => recordSource);
+
     getEnvironment();
   });
 

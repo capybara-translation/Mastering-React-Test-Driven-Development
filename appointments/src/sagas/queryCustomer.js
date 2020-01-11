@@ -2,47 +2,6 @@ import { put, call } from 'redux-saga/effects';
 import { fetchQuery, graphql } from 'relay-runtime';
 import { getEnvironment } from '../relayEnvironment';
 
-export const query = graphql`
-  query queryCustomerQuery($id: ID!) {
-    customer(id: $id) {
-      id
-      firstName
-      lastName
-      phoneNumber
-      appointments {
-        startsAt
-        stylist
-        service
-        notes
-      }
-    }
-  }
-`;
-
-const convertStatsAt = appointment => ({
-  ...appointment,
-  startsAt: Number(appointment.startsAt)
-});
-
-export function* queryCustomer({ id }) {
-  yield put({ type: 'QUERY_CUSTOMER_SUBMITTING' });
-  try {
-    const { customer } = yield call(
-      fetchQuery, 
-      getEnvironment(), 
-      query, 
-      { id }
-    );
-    yield put({
-      type: 'QUERY_CUSTOMER_SUCCESSFUL',
-      customer,
-      appointments: customer.appointments.map(convertStatsAt)
-    });
-  } catch (e) {
-    yield put({ type: 'QUERY_CUSTOMER_FAILED' });
-  }
-}
-
 const defaultState = {
   customer: {},
   appointments: [],
@@ -66,3 +25,44 @@ export const reducer = (state = defaultState, action) => {
       return state;
   }
 };
+
+export const query = graphql`
+  query queryCustomerQuery($id: ID!) {
+    customer(id: $id) {
+      id
+      firstName
+      lastName
+      phoneNumber
+      appointments {
+        startsAt
+        stylist
+        service
+        notes
+      }
+    }
+  }
+`;
+
+const convertStartsAt = appointment => ({
+  ...appointment,
+  startsAt: Number(appointment.startsAt)
+});
+
+export function* queryCustomer({ id }) {
+  yield put({ type: 'QUERY_CUSTOMER_SUBMITTING' });
+  try {
+    const { customer } = yield call(
+      fetchQuery,
+      getEnvironment(),
+      query,
+      { id }
+    );
+    yield put({
+      type: 'QUERY_CUSTOMER_SUCCESSFUL',
+      customer,
+      appointments: customer.appointments.map(convertStartsAt)
+    });
+  } catch (e) {
+    yield put({ type: 'QUERY_CUSTOMER_FAILED' });
+  }
+}
