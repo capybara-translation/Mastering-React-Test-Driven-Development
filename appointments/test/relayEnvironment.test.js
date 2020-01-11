@@ -10,7 +10,6 @@ import {
   Store,
   RecordSource
 } from 'relay-runtime';
-import { expectRedux } from 'expect-redux';
 jest.mock('relay-runtime');
 
 describe('performFetch', () => {

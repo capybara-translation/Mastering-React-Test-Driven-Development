@@ -1,7 +1,7 @@
 import {
   Environment,
-  Network,
   Store,
+  Network,
   RecordSource
 } from 'relay-runtime';
 
