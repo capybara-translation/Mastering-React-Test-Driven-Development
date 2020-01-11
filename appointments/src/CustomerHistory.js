@@ -35,7 +35,8 @@ export const CustomerHistory = connect(
   if (status === 'FAILED') {
     return (
       <div id="error">
-        Sorry, an error occurred while pulling data from the server.
+        Sorry, an error occurred while pulling data from the
+        server.
       </div>
     );
   }

@@ -4,6 +4,7 @@ import { AppointmentFormLoader } from './AppointmentFormLoader';
 import { AppointmentsDayViewLoader } from './AppointmentsDayViewLoader';
 import { CustomerForm } from './CustomerForm';
 import { CustomerSearchRoute } from './CustomerSearchRoute';
+import { CustomerHistory } from './CustomerHistory';
 import { connect } from 'react-redux';
 
 export const MainScreen = () => (
@@ -31,12 +32,20 @@ export const App = ({ history, setCustomerForAppointment }) => {
     [history]
   );
 
+  const transitionToCustomerHistory = customer =>
+    history.push(`/customer/${customer.id}`);
+
   const searchActions = customer => (
     <React.Fragment>
       <button
         role="button"
         onClick={() => transitionToAddAppointment(customer)}>
         Create appointment
+      </button>
+      <button
+        role="button"
+        onClick={() => transitionToCustomerHistory(customer)}>
+        View history
       </button>
     </React.Fragment>
   );
@@ -59,6 +68,11 @@ export const App = ({ history, setCustomerForAppointment }) => {
           />
         )}
       />
+      <Route
+        path="/customer/:id"
+        render={({ match }) => (
+          <CustomerHistory id={match.params.id} />
+        )}></Route>
       <Route component={MainScreen} />
     </Switch>
   );

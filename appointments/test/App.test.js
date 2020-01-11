@@ -14,6 +14,8 @@ import { AppointmentFormLoader } from '../src/AppointmentFormLoader';
 import { AppointmentsDayViewLoader } from '../src/AppointmentsDayViewLoader';
 import { CustomerForm } from '../src/CustomerForm';
 import { CustomerSearchRoute } from '../src/CustomerSearchRoute';
+import { CustomerHistory } from '../src/CustomerHistory';
+import { expectRedux } from 'expect-redux';
 
 describe('MainScreen', () => {
   let render, child, elementMatching;
@@ -164,6 +166,33 @@ describe('App', () => {
       )[0];
       click(button);
       expect(dispatchSpy).toHaveBeenCalledWith(customer);
+    });
+
+    it('passes a button to the CustomerSearch named View history', async () => {
+      const button = childrenOf(
+        renderSearchActionsForCustomer(customer)
+      )[1];
+      expect(button.type).toEqual('button');
+      expect(button.props.role).toEqual('button');
+      expect(button.props.children).toEqual('View history');
+    });
+
+    it('navigates to /customer/:id when clicking the View history button', async () => {
+      const button = childrenOf(
+        renderSearchActionsForCustomer(customer)
+      )[1];
+      click(button);
+      expect(historySpy).toHaveBeenCalledWith('/customer/123');
+    });
+
+    it('renders CustomerHistory at /customer', async () => {
+      render(<App />);
+      const match = { params: { id: '123' } };
+      const element = routeFor('/customer/:id').props.render({
+        match
+      });
+      expect(element.type).toEqual(CustomerHistory);
+      expect(element.props.id).toEqual('123');
     });
   });
 });
