@@ -185,7 +185,7 @@ describe('App', () => {
     });
   });
 
-  it('renders CustomerHistory at /customer', async () => {
+  it('renders CustomerHistory at /customer', () => {
     render(<App />);
     const match = { params: { id: '123' } };
     const element = routeFor('/customer/:id').props.render({
