@@ -1,13 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = ({
-  queryCustomer: { customer, appointments, status }
-}) => ({ customer, appointments, status });
-const mapDispatchToProps = {
-  queryCustomer: id => ({ type: 'QUERY_CUSTOMER_REQUEST', id })
-};
-
 const toTimeString = startsAt =>
   new Date(startsAt).toString().substring(0, 21);
 
@@ -20,6 +13,13 @@ const AppointmentRow = ({ appointment }) => (
   </tr>
 );
 
+const mapStateToProps = ({
+  queryCustomer: { customer, appointments, status }
+}) => ({ customer, appointments, status });
+const mapDispatchToProps = {
+  queryCustomer: id => ({ type: 'QUERY_CUSTOMER_REQUEST', id })
+};
+
 export const CustomerHistory = connect(
   mapStateToProps,
   mapDispatchToProps
@@ -28,18 +28,18 @@ export const CustomerHistory = connect(
     queryCustomer(id);
   }, [id, queryCustomer]);
 
-  const { firstName, lastName, phoneNumber } = customer;
-  if (status === 'SUBMITTING') {
+  if (status === 'SUBMITTING')
     return <div id="loading">Loading</div>;
-  }
-  if (status === 'FAILED') {
+
+  if (status === 'FAILED')
     return (
       <div id="error">
         Sorry, an error occurred while pulling data from the
         server.
       </div>
     );
-  }
+
+  const { firstName, lastName, phoneNumber } = customer;
   return (
     <div id="customer">
       <h2>

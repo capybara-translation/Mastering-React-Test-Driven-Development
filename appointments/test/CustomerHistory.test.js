@@ -1,5 +1,4 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { expectRedux } from 'expect-redux';
 import { createContainerWithStore } from './domManipulators';
 import { fetchQuery } from 'relay-runtime';
